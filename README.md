@@ -1,5 +1,5 @@
 # HypeMachineDownloader
-Automaticall download favorite tracks from Hype Machine
+Automatically download favorite tracks from Hype Machine
 
 Usage:
 `HypeMachineDownloader --account youraccount --page 1`
