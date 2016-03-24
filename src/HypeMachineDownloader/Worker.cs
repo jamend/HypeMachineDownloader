@@ -89,7 +89,7 @@ namespace HypeMachineDownloader
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error(ex, "Error downloading track {0}", track.name);
+                    Logger.Error(ex, "Error getting download URL for track {0}", track.name);
                     continue;
                 }
 
@@ -103,13 +103,29 @@ namespace HypeMachineDownloader
                 {
                     Logger.Info("Downloading track {0}", track.name);
 
-                    var outputStream = Download(downloadInfo);
+                    Stream outputStream;
+                    try
+                    {
+                        outputStream = Download(downloadInfo);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error(ex, "Error downloading track {0} ({1})", track.name, downloadInfo.url);
+                        continue;
+                    }
 
-                    var stream = File.Create(outputFile);
-                    outputStream.CopyTo(stream);
-                    stream.Close();
-                    stream.Dispose();
-                    outputStream.Close();
+                    try
+                    {
+                        var stream = File.Create(outputFile);
+                        outputStream.CopyTo(stream);
+                        stream.Close();
+                        stream.Dispose();
+                        outputStream.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Error(ex, "Error saving track {0} ({1})", track.name, outputFile);
+                    }
                 }
             }
 
